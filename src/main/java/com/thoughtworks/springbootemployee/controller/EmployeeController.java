@@ -58,19 +58,13 @@ public class EmployeeController {
         return employeeWithSpecificID;
     }
 
-    @GetMapping(path = "?page={page}&pageSize={pageSize}")
+    @GetMapping(params = {"page", "pageSize"})
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> paging(@PathVariable Integer page, Integer pageSize) {
+    public List<Employee> paging(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
         List<Employee> employees = getAllEmployees();
-        if (page == null || pageSize == null) {
-            return employees;
-        }
-        Integer leftBound = (page - 1) * pageSize;
-        Integer rightBound = (page - 1) * pageSize + pageSize;
-        leftBound = leftBound > employees.size() - 1 ? 0 : leftBound;
-        rightBound = rightBound > employees.size() - 1 ? employees.size() : rightBound;
-
-        return employees.subList(leftBound, rightBound);
+        int startIndex = (page - 1) * pageSize;
+        int endIndex = Math.min((startIndex + pageSize), employees.size());
+        return employees.subList(startIndex, endIndex);
     }
 
     @GetMapping(params = "gender")

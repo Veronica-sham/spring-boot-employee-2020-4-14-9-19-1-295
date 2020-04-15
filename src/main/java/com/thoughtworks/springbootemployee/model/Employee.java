@@ -11,7 +11,7 @@ public class Employee {
     private String gender;
     private int salary;
 
-    public Employee(int id, String name,int age, String gender, int salary) {
+    public Employee(int id, String name, int age, String gender, int salary) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -20,54 +20,53 @@ public class Employee {
     }
 
 
-    public int getId(){
+    public int getId() {
         return this.id;
     }
 
-    public void setId(int newID){
+    public void setId(int newID) {
         this.id = newID;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
-    public void setName(String newName){
+    public void setName(String newName) {
         this.name = newName;
     }
 
-    public String getGender(){
+    public String getGender() {
         return this.gender;
     }
 
-    public void setGender(String newGender){
+    public void setGender(String newGender) {
         this.gender = gender;
     }
 
-    public int getAge(){
+    public int getAge() {
         return this.age;
     }
 
-    public void setAge(int newAge){
+    public void setAge(int newAge) {
         this.age = newAge;
     }
 
-    public int getSalary(){
+    public int getSalary() {
         return this.salary;
     }
 
-    public void setSalary(int salary){
+    public void setSalary(int salary) {
         this.salary = salary;
     }
 
-    public void update(int employeeID,String name,String gender, int age, int salary) {
+    public void update(int employeeID, String name, String gender, int age, int salary) {
         this.id = employeeID;
         this.name = name;
         this.age = age;
         this.gender = gender;
         this.salary = salary;
     }
-
 
 
 }

@@ -23,7 +23,7 @@ public class CompanyController {
     @ResponseStatus(HttpStatus.OK)
     public List<Company> getAllCompanies() {
         List<Company> companies = new ArrayList<>();
-        companies.add(new Company("OOCL",employeeController.getAllEmployees()));
+        companies.add(new Company("OOCL", employeeController.getAllEmployees()));
         return companies;
     }
 
