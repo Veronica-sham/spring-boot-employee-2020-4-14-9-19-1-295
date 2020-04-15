@@ -1,5 +1,7 @@
 package com.thoughtworks.springbootemployee.model;
 
+import org.springframework.web.bind.annotation.RequestBody;
+
 import java.util.List;
 
 public class Employee {
@@ -17,9 +19,6 @@ public class Employee {
         this.salary = salary;
     }
 
-    public void add(Employee employee) {
-
-    }
 
     public int getId(){
         return this.id;
@@ -61,10 +60,13 @@ public class Employee {
         this.salary = salary;
     }
 
-  /*  public Employee getEmployeeWithSpecificID(List<Employee> employees){
-
-        return employee;
-    } */
+    public void update(int employeeID,String name,String gender, int age, int salary) {
+        this.id = employeeID;
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.salary = salary;
+    }
 
 
 

@@ -9,6 +9,7 @@ import sun.font.TrueTypeFont;
 import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,6 +18,7 @@ import java.util.stream.Stream;
 @RequestMapping("/employees")
 public class EmployeeController {
 
+    private Employee employeeController;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -24,29 +26,29 @@ public class EmployeeController {
 
         List<Employee> employees = new ArrayList<>();
         employees.add(new Employee(1, "Paul", 18, "Male", 4000));
-        employees.add(new Employee(2, "Amy", 20, "Female",8000));
-        employees.add(new Employee(3,"May",23,"Female",9000));
-        employees.add(new Employee(4,"King",18,"Male",7000));
-        employees.add(new Employee(5,"Rory",18,"Male",7000));
-        employees.add(new Employee(6,"Kelvin",18,"Male",7000));
-        employees.add(new Employee(7,"Keith",18,"Male",7000));
-        employees.add(new Employee(8,"Chris",18,"Male",7000));
-        employees.add(new Employee(9,"Warren",18,"Male",7000));
-        employees.add(new Employee(10,"King",18,"Male",7000));
-        employees.add(new Employee(11,"Rory",18,"Male",7000));
-        employees.add(new Employee(12,"Kelvin",18,"Male",7000));
-        employees.add(new Employee(13,"Keith",18,"Male",7000));
-        employees.add(new Employee(14,"Chris",18,"Male",7000));
-        employees.add(new Employee(15,"Warren",18,"Male",7000));
-
+        employees.add(new Employee(2, "Amy", 20, "Female", 8000));
+        employees.add(new Employee(3, "May", 23, "Female", 9000));
+        employees.add(new Employee(4, "King", 18, "Male", 7000));
+        employees.add(new Employee(5, "Rory", 18, "Male", 7000));
+        employees.add(new Employee(6, "Kelvin", 18, "Male", 7000));
+        employees.add(new Employee(7, "Keith", 18, "Male", 7000));
+        employees.add(new Employee(8, "Chris", 18, "Male", 7000));
+        employees.add(new Employee(9, "Warren", 18, "Male", 7000));
+        employees.add(new Employee(10, "King", 18, "Male", 7000));
+        employees.add(new Employee(11, "Rory", 18, "Male", 7000));
+        employees.add(new Employee(12, "Kelvin", 18, "Male", 7000));
+        employees.add(new Employee(13, "Keith", 18, "Male", 7000));
+        employees.add(new Employee(14, "Chris", 18, "Male", 7000));
+        employees.add(new Employee(15, "Warren", 18, "Male", 7000));
 
         return employees;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee createNewEmployee(@RequestBody Employee employee){
-        employee.add(employee);
+    public Employee createNewEmployee(@RequestBody Employee employee) {
+        List<Employee> employees = getAllEmployees();
+        employees.add(employee);
         return employee;
     }
 
@@ -63,26 +65,43 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> paging(@PathVariable Integer page, Integer pageSize) {
         List<Employee> employees = getAllEmployees();
-        if (page == null || pageSize ==null){
+        if (page == null || pageSize == null) {
             return employees;
         }
-        Integer leftBound = (page -1)*pageSize;
-        Integer rightBound = (page-1)*pageSize +pageSize;
-        leftBound = leftBound>employees.size() - 1?0:leftBound;
-        rightBound = rightBound>employees.size() - 1?employees.size():rightBound;
+        Integer leftBound = (page - 1) * pageSize;
+        Integer rightBound = (page - 1) * pageSize + pageSize;
+        leftBound = leftBound > employees.size() - 1 ? 0 : leftBound;
+        rightBound = rightBound > employees.size() - 1 ? employees.size() : rightBound;
 
         return employees.subList(leftBound, rightBound);
     }
 
     @GetMapping(params = "gender")
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> getEmployeesWithSpecificGender(@RequestParam(defaultValue = "Female") String gender) {
+    public List<Employee> getEmployeesWithSpecificGender(@RequestParam(required = false) String gender) {
         List<Employee> employees = getAllEmployees();
-        List<Employee> employeeWithSpecificGender = employees.stream().filter(employee -> employee.getGender()==gender).collect(Collectors.toList());
+        List<Employee> employeeWithSpecificGender = employees.stream().filter(employee -> employee.getGender().equals(gender)).collect(Collectors.toList());
         return employeeWithSpecificGender;
     }
 
+    @PutMapping("/{employeeId}")
+    public Employee update(@PathVariable Integer employeeId, @RequestBody Employee employee) {
+        List<Employee> employees = getAllEmployees();
+        Employee oldEmployee = employees.stream().filter(staff -> staff.getId() == employeeId).findFirst().get();
+        int oldEmployeeIndex = employees.indexOf(oldEmployee);
+        employees.get(oldEmployeeIndex).update(employeeId, employee.getName(), employee.getGender(), employee.getAge(), employee.getSalary());
+        return employees.get(oldEmployeeIndex);
+    }
 
+
+    @DeleteMapping("/{employeeId}")
+    public List<Employee> delete(@PathVariable Integer employeeId) {
+        List<Employee> employees = getAllEmployees();
+        Employee oldEmployee = employees.stream().filter(staff -> staff.getId() == employeeId).findFirst().get();
+        int oldEmployeeIndex = employees.indexOf(oldEmployee);
+        employees.remove(oldEmployeeIndex);
+        return employees;
+    }
 
 
 
