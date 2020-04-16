@@ -182,4 +182,24 @@ public class EmployeeControllerTest {
 
     }
 
+    @Test
+    public void shouldReturnEmployeeListWithSpecificSize(){
+        doReturn(employees).when(service).returnSpecificNumberOfEmployees(any(),any());
+        MockMvcResponse response = given().contentType(ContentType.JSON)
+                .when()
+                .get("/employees?page=1&pageSize=5");
+
+        Assert.assertEquals(200, response.getStatusCode());
+
+        List<Employee> employee = response.getBody().as(new TypeRef<List<Employee>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        });
+        System.out.println(employee);
+        Assert.assertEquals(7, employee.size());
+
+    }
+
 }

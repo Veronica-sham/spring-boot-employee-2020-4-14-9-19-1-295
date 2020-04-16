@@ -44,11 +44,7 @@ public class EmployeeController {
     @GetMapping(params = {"page", "pageSize"})
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> returnSpecificNumberOfEmployees(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
-        //check null-->return all
-        List<Employee> employees = getAllEmployees();
-        int startIndex = (page - 1) * pageSize;
-        int endIndex = Math.min((startIndex + pageSize), employees.size());
-        return employees.subList(startIndex, endIndex);
+        return service.returnSpecificNumberOfEmployees(page, pageSize);
     }
 
     @GetMapping(params = "gender")
