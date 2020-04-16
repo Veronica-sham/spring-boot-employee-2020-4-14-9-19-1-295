@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/employees")
 public class EmployeeController {
 
-    private Employee employeeController;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -43,16 +42,15 @@ public class EmployeeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee createNewEmployee(@RequestBody Employee employee) {
+    public List<Employee> createNewEmployee(@RequestBody Employee employee) {
         List<Employee> employees = getAllEmployees();
         employees.add(employee);
-        return employee;
+        return employees;
     }
 
     @GetMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getEmployeesWithSpecificID(@PathVariable int id) {
-
         List<Employee> employees = getAllEmployees();
         List<Employee> employeeWithSpecificID = employees.stream().filter(employee -> employee.getId() == id).collect(Collectors.toList());
         return employeeWithSpecificID;
@@ -61,6 +59,7 @@ public class EmployeeController {
     @GetMapping(params = {"page", "pageSize"})
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> paging(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
+        //check null-->return all
         List<Employee> employees = getAllEmployees();
         int startIndex = (page - 1) * pageSize;
         int endIndex = Math.min((startIndex + pageSize), employees.size());
@@ -78,7 +77,7 @@ public class EmployeeController {
     @PutMapping("/{employeeId}")
     public Employee update(@PathVariable Integer employeeId, @RequestBody Employee employee) {
         List<Employee> employees = getAllEmployees();
-        Employee oldEmployee = employees.stream().filter(staff -> staff.getId() == employeeId).findFirst().get();
+        Employee oldEmployee = employees.stream().filter(staff -> staff.getId() == employeeId).findFirst().get(); //orElse , if return null
         int oldEmployeeIndex = employees.indexOf(oldEmployee);
         employees.get(oldEmployeeIndex).update(employeeId, employee.getName(), employee.getGender(), employee.getAge(), employee.getSalary());
         return employees.get(oldEmployeeIndex);
@@ -89,12 +88,9 @@ public class EmployeeController {
     public List<Employee> delete(@PathVariable Integer employeeId) {
         List<Employee> employees = getAllEmployees();
         Employee oldEmployee = employees.stream().filter(staff -> staff.getId() == employeeId).findFirst().get();
-        int oldEmployeeIndex = employees.indexOf(oldEmployee);
-        employees.remove(oldEmployeeIndex);
+        employees.remove(oldEmployee);
         return employees;
     }
-
-
 
 
 }
