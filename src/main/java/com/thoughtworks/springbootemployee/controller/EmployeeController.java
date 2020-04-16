@@ -75,6 +75,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/{employeeId}")
+    @ResponseStatus(HttpStatus.OK)
     public Employee update(@PathVariable Integer employeeId, @RequestBody Employee employee) {
         List<Employee> employees = getAllEmployees();
         Employee oldEmployee = employees.stream().filter(staff -> staff.getId() == employeeId).findFirst().get(); //orElse , if return null

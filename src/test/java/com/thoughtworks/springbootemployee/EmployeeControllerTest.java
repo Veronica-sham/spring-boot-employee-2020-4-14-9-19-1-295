@@ -87,12 +87,25 @@ public class EmployeeControllerTest {
             }
         });
 
-        if(employee.stream().filter(staff -> staff.getId() == employeeID).findFirst().isPresent() == false){
+        if(employee.stream().noneMatch(staff -> staff.getId() == employeeID)){
             containThisEmployee = false;
         }
 
         Assert.assertEquals(false, containThisEmployee);
     }
 
+    @Test
+    public void shouldUpdateEmployeeData(){
+        Employee newEmployee = new Employee(15, "Wendy", 30, "Female", 9000);
+        MockMvcResponse response = given().contentType(ContentType.JSON)
+                .body(newEmployee)
+                .when()
+                .put("/employees/15");
+
+        Assert.assertEquals(200, response.getStatusCode());
+        Employee updatedEmployee = response.getBody().as(Employee.class);
+        Assert.assertEquals(newEmployee.getName() , updatedEmployee.getName());
+
+    }
 
 }
