@@ -68,6 +68,30 @@ public class EmployeeControllerTest {
         Employee addedEmployee = employee.stream().filter(staff -> staff.getId() == 19).findFirst().get();
 
         Assert.assertEquals(newEmployee.getId(), addedEmployee.getId());
+        Assert.assertEquals(newEmployee.getName(), addedEmployee.getName());
+    }
+
+    @Test
+    public void shouldDeleteSpecificEmployee() {
+        Integer employeeID = 15;
+        Boolean containThisEmployee = true;
+        MockMvcResponse response = given().contentType(ContentType.JSON)
+                .when()
+                .delete("/employees/15");
+
+        Assert.assertEquals(200, response.getStatusCode());
+        List<Employee> employee = response.getBody().as(new TypeRef<List<Employee>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        });
+
+        if(employee.stream().filter(staff -> staff.getId() == employeeID).findFirst().isPresent() == false){
+            containThisEmployee = false;
+        }
+
+        Assert.assertEquals(false, containThisEmployee);
     }
 
 
