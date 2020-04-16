@@ -8,9 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @SpringBootApplication
 @RestController
@@ -40,7 +38,7 @@ public class EmployeeController {
 
     @GetMapping(params = {"page", "pageSize"})
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> paging(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
+    public List<Employee> returnSpecificNumberOfEmployees(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
         //check null-->return all
         List<Employee> employees = getAllEmployees();
         int startIndex = (page - 1) * pageSize;
@@ -51,29 +49,20 @@ public class EmployeeController {
     @GetMapping(params = "gender")
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getEmployeesWithSpecificGender(@RequestParam(required = false) String gender) {
-        List<Employee> employees = getAllEmployees();
-        List<Employee> employeeWithSpecificGender = employees.stream().filter(employee -> employee.getGender().equals(gender)).collect(Collectors.toList());
-        return employeeWithSpecificGender;
+        return service.findEmployeeByGender(gender);
     }
 
     @PutMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
     public Employee update(@PathVariable Integer employeeId, @RequestBody Employee employee) {
-        List<Employee> employees = getAllEmployees();
-        Employee oldEmployee = employees.stream().filter(staff -> staff.getId() == employeeId).findFirst().get(); //orElse , if return null
-        int oldEmployeeIndex = employees.indexOf(oldEmployee);
-        employees.get(oldEmployeeIndex).update(employeeId, employee.getName(), employee.getGender(), employee.getAge(), employee.getSalary());
-        return employees.get(oldEmployeeIndex);
+        return service.updateEmployee(employeeId, employee);
     }
 
 
     @DeleteMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> delete(@PathVariable Integer employeeId) {
-        List<Employee> employees = getAllEmployees();
-        Employee oldEmployee = employees.stream().filter(staff -> staff.getId() == employeeId).findFirst().get();
-        employees.remove(oldEmployee);
-        return employees;
+        return service.deleteEmployee(employeeId);
     }
 
 

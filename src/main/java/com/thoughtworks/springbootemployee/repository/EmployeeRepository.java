@@ -33,14 +33,36 @@ public class EmployeeRepository {
         return employees;
     }
 
-
     public List<Employee> createNewEmployee(Employee employee) {
         employees.add(employee);
         return employees;
     }
 
     public List<Employee> findEmployeeByID(Integer employeeID) {
-        List<Employee> employeeWithSpecificID = employees.stream().filter(employee -> employee.getId() == employeeID).collect(Collectors.toList());
-        return employeeWithSpecificID;
+        return employees.stream().filter(employee -> employee.getId() == employeeID).collect(Collectors.toList());
+    }
+
+    public List<Employee> findEmployeeByGender(String gender) {
+        return employees.stream().filter(employee -> employee.getGender().equals(gender)).collect(Collectors.toList());
+    }
+
+
+    public Employee updateEmployee(Integer employeeID, Employee employee) {
+        Employee oldEmployee = employees.stream().filter(staff -> staff.getId() == employeeID).findFirst().orElse(null);
+        System.out.println(oldEmployee.getName());
+        int oldEmployeeIndex = employees.indexOf(oldEmployee);
+        employees.get(oldEmployeeIndex).update(employeeID, employee.getName(), employee.getGender(), employee.getAge(), employee.getSalary());
+        System.out.println("\n"+oldEmployee.getName());
+        return employees.get(oldEmployeeIndex);
+    }
+
+    public List<Employee> deleteEmployee(Integer employeeID) {
+        Employee oldEmployee = employees.stream().filter(staff -> staff.getId() == employeeID).findFirst().orElse(null);
+        employees.remove(oldEmployee);
+        return employees;
+    }
+
+    public List<Employee> returnSpecificNumberOfEmployees(int startIndex, int endIndex) {
+        return employees.subList(startIndex, endIndex);
     }
 }
