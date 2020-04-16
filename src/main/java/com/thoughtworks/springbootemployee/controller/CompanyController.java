@@ -71,4 +71,12 @@ public class CompanyController {
         return companies;
     }
 
+    @GetMapping(params = {"page", "pageSize"})
+    @ResponseStatus(HttpStatus.OK)
+    public List<Company> paging(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
+        List<Company> companies = getAllCompanies();
+        int startIndex = (page - 1) * pageSize;
+        int endIndex = Math.min((startIndex + pageSize), companies.size());
+        return companies.subList(startIndex, endIndex);
+    }
 }
