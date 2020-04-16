@@ -9,7 +9,7 @@ public class Company {
     private int employeesNumber;
 
 
-    public Company(String companyName, List<Employee> employeeList, int employeesNumber) {
+    public Company(String companyName, List<Employee> employeeList, Integer employeesNumber) {
         this.companyName = companyName;
         this.employeesNumber = employeesNumber;
         this.employeeList = employeeList;

@@ -15,12 +15,12 @@ public class CompanyRepository {
     public CompanyRepository() {
         List<Employee> employeeList1 = new ArrayList<>();
         List<Employee> employeeList2 = new ArrayList<>();
-        companies.add(new Company("OOCL", employeeList1, employeeList1.size()));
+        companies.add(new Company("OOCL", employeeList1, 4));
         employeeList1.add(new Employee(1, "Amy", 20, "Female", 8000));
         employeeList1.add(new Employee(2, "Hsa", 23, "Male", 5000));
         employeeList1.add(new Employee(3, "Anwars", 22, "Female", 9400));
         employeeList1.add(new Employee(4, "Uio", 25, "Male", 9900));
-        companies.add(new Company("ABC", employeeList2, employeeList2.size()));
+        companies.add(new Company("ABC", employeeList2, 5));
         employeeList2.add(new Employee(1, "dcfs", 67, "Female", 9000));
         employeeList2.add(new Employee(2, "dvc", 34, "Male", 9000));
         employeeList2.add(new Employee(3, "xv", 23, "Female", 9200));

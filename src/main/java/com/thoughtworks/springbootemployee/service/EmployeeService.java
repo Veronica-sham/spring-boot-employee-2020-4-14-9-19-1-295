@@ -4,7 +4,6 @@ import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -45,7 +44,6 @@ public class EmployeeService {
         int endIndex = Math.min((startIndex + pageSize), employeeRepository.getAllEmployee().size());
         return employeeRepository.returnSpecificNumberOfEmployees(startIndex, endIndex);
 
-        //return employees.subList(startIndex, endIndex);
     }
 
 }

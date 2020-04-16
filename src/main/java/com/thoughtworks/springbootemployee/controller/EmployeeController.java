@@ -18,6 +18,11 @@ public class EmployeeController {
     @Autowired
     private EmployeeService service;
 
+    public EmployeeController(EmployeeService service) {
+        this.service = service;
+    }
+
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getAllEmployees() {

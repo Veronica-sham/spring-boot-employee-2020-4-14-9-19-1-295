@@ -17,7 +17,7 @@ import java.util.List;
 
 public class CompanyController {
 
-    EmployeeController employeeController = new EmployeeController();
+
     @Autowired
     private CompanyService service;
 
