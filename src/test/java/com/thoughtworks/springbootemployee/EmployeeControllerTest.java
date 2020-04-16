@@ -49,6 +49,26 @@ public class EmployeeControllerTest {
         Assert.assertEquals("Paul", employee.get(0).getName());
     }
 
+    @Test
+    public void shouldCreateNewEmployee() {
+        Employee newEmployee = new Employee(19, "Wendy", 30, "Female", 9000);
+        MockMvcResponse response = given().contentType(ContentType.JSON)
+                .body(newEmployee)
+                .when()
+                .post("/employees");
+
+        Assert.assertEquals(201, response.getStatusCode());
+        List<Employee> employee = response.getBody().as(new TypeRef<List<Employee>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        });
+
+        Employee addedEmployee = employee.stream().filter(staff -> staff.getId() == 19).findFirst().get();
+
+        Assert.assertEquals(newEmployee.getId(), addedEmployee.getId());
+    }
 
 
 }
