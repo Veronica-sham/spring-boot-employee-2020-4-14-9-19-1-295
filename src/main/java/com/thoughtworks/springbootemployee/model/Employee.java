@@ -1,8 +1,5 @@
 package com.thoughtworks.springbootemployee.model;
 
-import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
 
 public class Employee {
     private int id;

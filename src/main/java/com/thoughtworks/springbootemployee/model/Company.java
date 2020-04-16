@@ -9,9 +9,9 @@ public class Company {
     private int employeesNumber;
 
 
-    public Company(String companyName, List<Employee> employeeList) {
+    public Company(String companyName, List<Employee> employeeList, int employeesNumber) {
         this.companyName = companyName;
-        this.employeesNumber = employeeList.size();
+        this.employeesNumber = employeesNumber;
         this.employeeList = employeeList;
     }
 
@@ -32,7 +32,7 @@ public class Company {
     }
 
     public int getEmployeesNumber() {
-        return employeesNumber;
+        return this.employeesNumber;
     }
 
     public void setEmployeesNumber(int employeesNumber) {
