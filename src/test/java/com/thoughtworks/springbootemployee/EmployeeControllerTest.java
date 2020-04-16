@@ -108,4 +108,31 @@ public class EmployeeControllerTest {
 
     }
 
+    @Test
+    public void shouldFindEmployeeByGender() {
+        Boolean containsFemales = true;
+        MockMvcResponse response = given().contentType(ContentType.JSON)
+                .params("gender","Male")
+                .when()
+                .get("/employees");
+
+        Assert.assertEquals(200, response.getStatusCode());
+
+        List<Employee> employee = response.getBody().as(new TypeRef<List<Employee>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        });
+
+        if(employee.stream().noneMatch(staff -> staff.getGender().equals("Female"))){
+           containsFemales = false;
+        }
+
+        Assert.assertEquals(false , containsFemales);
+
+    }
+
+
+
 }
