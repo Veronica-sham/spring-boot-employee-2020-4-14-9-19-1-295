@@ -8,6 +8,10 @@ public class Company {
     private String companyName;
     private int employeesNumber;
 
+    public Company() {
+
+    }
+
 
     public Company(String companyName, List<Employee> employeeList, Integer employeesNumber) {
         this.companyName = companyName;
@@ -42,6 +46,7 @@ public class Company {
     public void update(Company company) {
         this.companyName = company.getCompanyName();
         this.employeeList = company.getEmployeeList();
-        this.employeesNumber = company.getEmployeeList().size();
+        setEmployeesNumber(company.getEmployeeList().size());
+        this.employeesNumber = getEmployeesNumber();
     }
 }

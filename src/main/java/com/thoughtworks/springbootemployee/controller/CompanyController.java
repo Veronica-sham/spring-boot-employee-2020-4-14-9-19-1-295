@@ -21,6 +21,10 @@ public class CompanyController {
     @Autowired
     private CompanyService service;
 
+    public CompanyController(CompanyService service) {
+        this.service = service;
+    }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Company> getAllCompanies() {
