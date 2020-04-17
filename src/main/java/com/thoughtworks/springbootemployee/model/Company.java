@@ -1,52 +1,36 @@
 package com.thoughtworks.springbootemployee.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "company")
 public class Company {
 
-    List<Employee> employeeList;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String companyName;
     private int employeesNumber;
 
-    public Company() {
+    @OneToMany(targetEntity = Employee.class, mappedBy = "companyId", fetch = FetchType.EAGER)
+    private List<Employee> employeeList;
 
-    }
-
-
-    public Company(String companyName, List<Employee> employeeList, Integer employeesNumber) {
-        this.companyName = companyName;
+    public Company(String companyName, List<Employee> employeeList, int employeesNumber) {
         this.employeesNumber = employeesNumber;
         this.employeeList = employeeList;
-    }
-
-    public List<Employee> getEmployeeList() {
-        return this.employeeList;
-    }
-
-    public void setEmployeeList(List<Employee> employees) {
-        this.employeeList = employees;
-    }
-
-    public String getCompanyName() {
-        return this.companyName;
-    }
-
-    public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
 
-    public int getEmployeesNumber() {
-        return this.employeesNumber;
-    }
 
-    public void setEmployeesNumber(int employeesNumber) {
-        this.employeesNumber = employeesNumber;
-    }
-
-    public void update(Company company) {
-        this.companyName = company.getCompanyName();
-        this.employeeList = company.getEmployeeList();
-        setEmployeesNumber(company.getEmployeeList().size());
-        this.employeesNumber = getEmployeesNumber();
-    }
 }

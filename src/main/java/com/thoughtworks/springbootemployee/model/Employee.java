@@ -16,6 +16,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "employee")
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,59 +25,10 @@ public class Employee {
     private Integer age;
     private String gender;
     private Integer salary;
+    private Integer companyId;
 
 
 
-    /*
-    public int getId() {
-        return this.id;
-    }
-
-    public void setId(int newID) {
-        this.id = newID;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String newName) {
-        this.name = newName;
-    }
-
-    public String getGender() {
-        return this.gender;
-    }
-
-    public void setGender(String newGender) {
-        this.gender = gender;
-    }
-
-    public int getAge() {
-        return this.age;
-    }
-
-    public void setAge(int newAge) {
-        this.age = newAge;
-    }
-
-    public int getSalary() {
-        return this.salary;
-    }
-
-    public void setSalary(int salary) {
-        this.salary = salary;
-    }
-    */
-
-
-    public void update(int employeeID, String name, String gender, int age, int salary) { //pass employee object
-        this.id = employeeID;
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-        this.salary = salary;
-    }
 
 
 }

@@ -36,20 +36,20 @@ public class EmployeeControllerTest {
     EmployeeService service;
 
     private List<Employee> employees = new ArrayList<>();
-    Employee newEmployee = new Employee(19, "Wendy", 30, "Female", 9000);
-    Employee updateEmployee = new Employee(3, "Wendy", 30, "Female", 9000);
+    Employee newEmployee = new Employee(19, "Wendy", 30, "Female", 9000, 1);
+    Employee updateEmployee = new Employee(3, "Wendy", 30, "Female", 9000, 2);
 
     @Before
     public void setUp() {
         EmployeeController employeeController = new EmployeeController(service);
         RestAssuredMockMvc.standaloneSetup(employeeController);
-        employees.add(new Employee(1, "Paul", 18, "Male", 4000));
-        employees.add(new Employee(2, "Amy", 20, "Female", 8000));
-        employees.add(new Employee(3, "May", 23, "Female", 9000));
-        employees.add(new Employee(4, "King", 18, "Male", 7000));
-        employees.add(new Employee(5, "Rory", 18, "Male", 7000));
-        employees.add(new Employee(6, "Kelvin", 18, "Male", 7000));
-        employees.add(new Employee(7, "Keith", 18, "Male", 7000));
+        employees.add(new Employee(1, "Paul", 18, "Male", 4000, 1));
+        employees.add(new Employee(2, "Amy", 20, "Female", 8000, 1));
+        employees.add(new Employee(3, "May", 23, "Female", 9000, 1));
+        employees.add(new Employee(4, "King", 18, "Male", 7000, 1));
+        employees.add(new Employee(5, "Rory", 18, "Male", 7000, 1));
+        employees.add(new Employee(6, "Kelvin", 18, "Male", 7000, 1));
+        employees.add(new Employee(7, "Keith", 18, "Male", 7000, 1));
 
     }
 

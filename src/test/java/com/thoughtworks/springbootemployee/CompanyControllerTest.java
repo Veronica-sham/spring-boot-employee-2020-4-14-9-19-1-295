@@ -44,26 +44,26 @@ public class CompanyControllerTest {
     Company newCompany;
     Company updateCompany = new Company("ABC", new ArrayList<>(), 2);
 
-    Employee newEmployee = new Employee(19, "Wendy", 30, "Female", 9000);
-    Employee updateEmployee = new Employee(3, "Wendy", 30, "Female", 9000);
+    Employee newEmployee = new Employee(19, "Wendy", 30, "Female", 9000, 1);
+    Employee updateEmployee = new Employee(3, "Wendy", 30, "Female", 9000, 2);
 
     @Before
     public void setUp() {
         CompanyController companyController = new CompanyController(service);
         RestAssuredMockMvc.standaloneSetup(companyController);
-        employees.add(new Employee(1, "Paul", 18, "Male", 4000));
-        employees.add(new Employee(2, "Amy", 20, "Female", 8000));
-        employees.add(new Employee(3, "May", 23, "Female", 9000));
-        employees.add(new Employee(4, "King", 18, "Male", 7000));
-        employees.add(new Employee(5, "Rory", 18, "Male", 7000));
-        employees.add(new Employee(6, "Kelvin", 18, "Male", 7000));
-        employees.add(new Employee(7, "Keith", 18, "Male", 7000));
-        employees2.add(new Employee(1, "Holly", 45, "Female", 8000));
-        employees2.add(new Employee(2, "Kel", 67, "Male", 8000));
+        employees.add(new Employee(1, "Paul", 18, "Male", 4000, 1));
+        employees.add(new Employee(2, "Amy", 20, "Female", 8000, 1));
+        employees.add(new Employee(3, "May", 23, "Female", 9000, 1));
+        employees.add(new Employee(4, "King", 18, "Male", 7000, 1));
+        employees.add(new Employee(5, "Rory", 18, "Male", 7000, 1));
+        employees.add(new Employee(6, "Kelvin", 18, "Male", 7000, 1));
+        employees.add(new Employee(7, "Keith", 18, "Male", 7000, 1));
+        employees2.add(new Employee(1, "Holly", 45, "Female", 8000, 1));
+        employees2.add(new Employee(2, "Kel", 67, "Male", 8000, 1));
         companies.add(new Company("OOCL",employees,7));
         companies.add(new Company("ABC", employees2, 2));
-        newEmployees.add(new Employee(19, "Wendy", 30, "Female", 9000));
-        newEmployees.add(new Employee(39, "fgj", 36, "Male", 9000));
+        newEmployees.add(new Employee(19, "Wendy", 30, "Female", 9000, 1));
+        newEmployees.add(new Employee(39, "fgj", 36, "Male", 9000, 1));
         newCompany = new Company("DDD", newEmployees, 2);
 
 

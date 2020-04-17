@@ -4,6 +4,7 @@ import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,31 +16,48 @@ public class CompanyService {
 
 
     public List<Company> getAllCompanies() {
-        return companyRepository.getAllCompany();
+        return companyRepository.findAll();
     }
 
     public List<Company> getCompanyWithSpecificName(String companyName) {
-        return companyRepository.getCompanyWithSpecificName(companyName);
-
+        return companyRepository.findAllByCompanyName(companyName);
     }
 
-    public List<Employee> getEmployeesInCompany(String company) {
-        return companyRepository.getEmployeesInCompany(company);
+    public List<Employee> getEmployeesInCompany(Integer companyId) {
+        Company companyWithSpecificId =  companyRepository.findById(companyId).orElse(null);
+        if (companyWithSpecificId == null) {
+            return null;
+        }
+        return companyWithSpecificId.getEmployeeList();
     }
 
     public List<Company> createNewCompany(Company company) {
-        return companyRepository.createNewCompany(company);
+        companyRepository.saveAndFlush(company);
+        return companyRepository.findAll();
     }
 
-    public Company updateCompany(String companyName, Company company) {
-        return companyRepository.updateCompany(companyName, company);
+    public Company updateCompany(Integer companyId, Company company) {
+        Company oldCompany = companyRepository.findById(companyId).orElse(null);
+        if (oldCompany != null) {
+            oldCompany.setEmployeeList(company.getEmployeeList());
+            oldCompany.setCompanyName(company.getCompanyName());
+            oldCompany.setEmployeesNumber(company.getEmployeesNumber());
+        }
+        return companyRepository.findById(companyId).orElse(null);
     }
 
-    public List<Company> deleteAllEmployees(String companyName) {
-        return companyRepository.deleteAllEmployees(companyName);
+    public List<Company> deleteCompany(Integer companyId) {
+        companyRepository.deleteById(companyId);
+        return companyRepository.findAll();
     }
 
     public List<Company> returnCompanyListWithSpecificSize(Integer page, Integer pageSize) {
-        return companyRepository.returnCompanyListWithSpecificSize(page, pageSize);
+        return companyRepository.findAll(PageRequest.of(page, pageSize)).getContent();
+    }
+
+    public Company getCompanyWithSpecificId(Integer companyId) {
+        Company companyWithSpecificId = companyRepository.findById(companyId).orElse(null);
+        System.out.println(companyWithSpecificId.getEmployeeList());
+        return companyWithSpecificId;
     }
 }
