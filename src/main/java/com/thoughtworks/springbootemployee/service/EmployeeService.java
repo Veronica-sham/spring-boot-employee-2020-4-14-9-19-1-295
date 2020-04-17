@@ -3,9 +3,11 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -13,37 +15,51 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
 
     public List<Employee> getAllEmployees(){
-        return employeeRepository.getAllEmployee();
+        return employeeRepository.findAll();
     }
 
-    public List<Employee> createNewEmployee(Employee employee){
-        return employeeRepository.createNewEmployee(employee);
+    public Employee createNewEmployee(Employee employee){
+        return employeeRepository.save(employee);
     }
 
-    public List<Employee> findEmployeeByID(Integer employeeID){
-        return employeeRepository.findEmployeeByID(employeeID);
+    public Employee findEmployeebyId(Integer id){
+        Employee oldEmployee = employeeRepository.findById(id).orElse(null);
+        return oldEmployee;
     }
 
     public List<Employee> findEmployeeByGender(String gender){
-        return employeeRepository.findEmployeeByGender(gender);
+        return employeeRepository.findAllByGender(gender);
     }
 
-    public Employee updateEmployee(Integer employeeID, Employee employee){
-        return employeeRepository.updateEmployee(employeeID, employee);
+    //employee ID not needed
+    public void updateEmployee(Integer id, Employee employee){
+        Employee oldEmployee = employeeRepository.findById(id).orElse(null);
+        if (oldEmployee != null) {
+            oldEmployee.setAge(employee.getAge());
+            oldEmployee.setName(employee.getName());
+            oldEmployee.setGender(employee.getGender());
+            oldEmployee.setSalary(employee.getSalary());
+            oldEmployee.setId(id);
+        }
+       // employeeRepository.findById(id);
     }
 
-    public List<Employee> deleteEmployee(Integer employeeID){
-        return employeeRepository.deleteEmployee(employeeID);
+    public void deleteEmployee(Integer id){
+       // Employee employee = (Employee) employeeRepository.finAllByEmployeeID(employeeID);
+        employeeRepository.deleteById(id);
     }
 
     public List<Employee> returnSpecificNumberOfEmployees(Integer page , Integer pageSize){
-        if(page == null || pageSize == null){
-            return employeeRepository.getAllEmployee();
+       /* if(page == null || pageSize == null){
+            return employeeRepository.findAllEmployee();
         }
         int startIndex = (page - 1) * pageSize;
-        int endIndex = Math.min((startIndex + pageSize), employeeRepository.getAllEmployee().size());
-        return employeeRepository.returnSpecificNumberOfEmployees(startIndex, endIndex);
+        int endIndex = Math.min((startIndex + pageSize), employeeRepository.findAllEmployee().size());
+        return employeeRepository.returnSpecificNumberOfEmployees(startIndex, endIndex); */
+       return employeeRepository.findAll(PageRequest.of(page,pageSize)).getContent();
 
     }
+
+
 
 }

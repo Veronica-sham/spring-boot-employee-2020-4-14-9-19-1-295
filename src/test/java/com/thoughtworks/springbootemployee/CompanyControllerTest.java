@@ -107,7 +107,7 @@ public class CompanyControllerTest {
             }
         });
 
-        Company newCompani = companyList.stream().filter(com -> com.getCompanyName().equals("DDD")).findFirst().get();
+        Company newCompani = companyList.stream().filter(com -> com.getCompanyName().equals("DDD")).findFirst().orElse(null);
 
         Assert.assertNotNull(newCompani);
 

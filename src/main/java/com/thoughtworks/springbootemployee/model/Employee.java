@@ -1,26 +1,33 @@
 package com.thoughtworks.springbootemployee.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.*;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
 public class Employee {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String name;
-    private int age;
+    private Integer age;
     private String gender;
-    private int salary;
-
-    public Employee() {
-
-    }
-
-    public Employee(int id, String name, int age, String gender, int salary) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-        this.salary = salary;
-    }
+    private Integer salary;
 
 
+
+    /*
     public int getId() {
         return this.id;
     }
@@ -60,8 +67,10 @@ public class Employee {
     public void setSalary(int salary) {
         this.salary = salary;
     }
+    */
 
-    public void update(int employeeID, String name, String gender, int age, int salary) {
+
+    public void update(int employeeID, String name, String gender, int age, int salary) { //pass employee object
         this.id = employeeID;
         this.name = name;
         this.age = age;

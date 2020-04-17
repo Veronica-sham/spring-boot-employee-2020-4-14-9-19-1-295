@@ -48,6 +48,7 @@ public class CompanyRepository {
         return companies;
     }
 
+    //logic put inside service
     public Company updateCompany(String companyName, Company company) {
         Company oldCompany = companies.stream().filter(thatCompany -> thatCompany.getCompanyName().equals(companyName)).findFirst().get();
         int oldCompanyIndex = companies.indexOf(oldCompany);
