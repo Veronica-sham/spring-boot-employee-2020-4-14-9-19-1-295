@@ -57,7 +57,9 @@ public class CompanyService {
 
     public Company getCompanyWithSpecificId(Integer companyId) {
         Company companyWithSpecificId = companyRepository.findById(companyId).orElse(null);
-        System.out.println(companyWithSpecificId.getEmployeeList());
+        if (companyWithSpecificId == null) {
+            return null;
+        }
         return companyWithSpecificId;
     }
 }
