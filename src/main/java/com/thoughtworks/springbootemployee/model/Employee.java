@@ -40,4 +40,12 @@ public class Employee {
         this.salary = salary;
         this.companyId = companyId;
     }
+
+
+    public void updateEmployeeData(Employee employee) {
+        this.name = employee.getName();
+        this.age = employee.getAge();
+        this.gender = employee.getGender();
+        this.salary = employee.getSalary();
+    }
 }

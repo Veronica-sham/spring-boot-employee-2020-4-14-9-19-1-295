@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,8 +30,8 @@ public class EmployeeControllerTest {
 
     public Employee employee = new Employee();
 
-   // @Autowired
-   // private EmployeeController employeeController;
+    // @Autowired
+    // private EmployeeController employeeController;
 
     @Mock
     EmployeeService service;
@@ -56,27 +57,22 @@ public class EmployeeControllerTest {
 
     @Test
     public void shouldFindEmployeeById() {
-        doReturn(employees).when(service).findEmployeebyId(any());
+        doReturn(employees.get(0)).when(service).findEmployeeById(any());
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
                 .get("/employees/1");
 
         Assert.assertEquals(200, response.getStatusCode());
 
-        List<Employee> employee = response.getBody().as(new TypeRef<List<Employee>>() {
-            @Override
-            public Type getType() {
-                return super.getType();
-            }
-        });
-        Assert.assertEquals(java.util.Optional.of(1), employee.get(0).getId());
-        Assert.assertEquals("Paul", employee.get(0).getName());
+        Employee employeeWithSpecificId = response.getBody().as(Employee.class);
+        Assert.assertNotNull(employeeWithSpecificId);
+        Assert.assertEquals("Paul", employeeWithSpecificId.getName());
     }
 
     @Test
     public void shouldCreateNewEmployee() {
         employees.add(newEmployee);
-        doReturn(employees).when(service).createNewEmployee(any());
+        doReturn(employees.get(employees.indexOf(newEmployee))).when(service).createNewEmployee(any());
 
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .body(newEmployee)
@@ -84,23 +80,17 @@ public class EmployeeControllerTest {
                 .post("/employees");
 
         Assert.assertEquals(201, response.getStatusCode());
-        List<Employee> employee = response.getBody().as(new TypeRef<List<Employee>>() {
-            @Override
-            public Type getType() {
-                return super.getType();
-            }
-        });
+        Employee addedEmployee = response.getBody().as(Employee.class);
 
-        Employee addedEmployee = employee.stream().filter(staff -> staff.getId() == 19).findFirst().orElse(null);
-
-        //assert employee not null
+        Assert.assertNotNull(addedEmployee);
         Assert.assertEquals(newEmployee.getId(), addedEmployee.getId());
         Assert.assertEquals(newEmployee.getName(), addedEmployee.getName());
     }
 
     @Test
     public void shouldDeleteSpecificEmployee() {
-        //do return... add mock
+        employees.remove(6);
+        doReturn(employees).when(service).deleteEmployee(any());
         int employeeID = 7;
         Boolean containThisEmployee = true;
         MockMvcResponse response = given().contentType(ContentType.JSON)
@@ -115,9 +105,9 @@ public class EmployeeControllerTest {
             }
         });
 
-        Assert.assertEquals(6,employee.size() );
+        Assert.assertEquals(6, employee.size());
 
-        if(employee.stream().noneMatch(staff -> staff.getId() == employeeID)){
+        if (employee.stream().noneMatch(staff -> staff.getId() == employeeID)) {
             containThisEmployee = false;
         }
 
@@ -125,7 +115,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void shouldUpdateEmployeeData(){
+    public void shouldUpdateEmployeeData() {
         doReturn(updateEmployee).when(service).updateEmployee(any(), any());
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .body(updateEmployee)
@@ -137,15 +127,17 @@ public class EmployeeControllerTest {
         Employee updatedEmployee = response.getBody().as(Employee.class);
 
         Assert.assertNotNull(updatedEmployee);
-        Assert.assertEquals(updateEmployee.getName() , updatedEmployee.getName());
+        Assert.assertEquals(updateEmployee.getName(), updatedEmployee.getName());
 
     }
 
     @Test
     public void shouldFindEmployeeByGender() {
+        List<Employee> femaleEmployees = employees.stream().filter(employee -> !employee.getGender().equals("Female")).collect(Collectors.toList());
+        doReturn(femaleEmployees).when(service).findEmployeeByGender(any());
         Boolean containsFemales = true;
         MockMvcResponse response = given().contentType(ContentType.JSON)
-                .params("gender","Female")
+                .params("gender", "Female")
                 .when()
                 .get("/employees");
 
@@ -158,19 +150,16 @@ public class EmployeeControllerTest {
             }
         });
         Assert.assertEquals(5, employee.size());
-        //assert size employee
 
-        if(employee.stream().noneMatch(staff -> staff.getGender().equals("Female"))){
-           containsFemales = false;
+        if (employee.stream().noneMatch(staff -> staff.getGender().equals("Female"))) {
+            containsFemales = false;
         }
-
-        Assert.assertEquals(false , containsFemales);
-
+        Assert.assertEquals(false, containsFemales);
     }
 
 
     @Test
-    public void shouldGetWholeEmployeeList(){
+    public void shouldGetWholeEmployeeList() {
         doReturn(employees).when(service).getAllEmployees();
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
@@ -184,13 +173,14 @@ public class EmployeeControllerTest {
                 return super.getType();
             }
         });
+        Assert.assertNotNull(employees);
         Assert.assertEquals(7, employee.size());
 
     }
 
     @Test
-    public void shouldReturnEmployeeListWithSpecificSize(){
-        doReturn(employees.subList(0,5)).when(service).returnSpecificNumberOfEmployees(any(),any()); //return the same employees list
+    public void shouldReturnEmployeeListWithSpecificSize() {
+        doReturn(employees.subList(0, 5)).when(service).returnSpecificNumberOfEmployees(any(), any()); //return the same employees list
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
                 .get("/employees?page=1&pageSize=5");
@@ -203,7 +193,7 @@ public class EmployeeControllerTest {
                 return super.getType();
             }
         });
-        System.out.println(employee);
+        Assert.assertNotNull(employee);
         Assert.assertEquals(5, employee.size());
 
     }

@@ -71,22 +71,17 @@ public class CompanyControllerTest {
 
 
     @Test
-    public void shouldGetCompanyWithSpecificName() {
-        doReturn(companies).when(service).getCompanyWithSpecificName(any());
+    public void shouldGetCompanyWithSpecificID() {
+        doReturn(companies.get(0)).when(service).getCompanyWithSpecificId(any());
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
-                .get("/companies?companyName=OOCL");
+                .get("/companies?companyId=1");
 
         Assert.assertEquals(200, response.getStatusCode());
 
-        List<Company> companyList = response.getBody().as(new TypeRef<List<Company>>() {
-            @Override
-            public Type getType() {
-                return super.getType();
-            }
-        });
-        Assert.assertEquals(7, companyList.get(0).getEmployeesNumber());
-        Assert.assertEquals("Paul", companyList.get(0).getEmployeeList().get(0).getName());
+        Company companyWithSpecificId = response.getBody().as(Company.class);
+        Assert.assertEquals(7,  companyWithSpecificId.getEmployeesNumber());
+        Assert.assertEquals("Paul", companyWithSpecificId.getEmployeeList().get(0).getName());
     }
 
     @Test
@@ -114,11 +109,14 @@ public class CompanyControllerTest {
     }
 
     @Test
-    public void shouldDeleteAllEmployees() {
-        Boolean containEmployee = true;
+    public void shouldDeleteCompany() {
+        companies.remove(0);
+        doReturn(companies).when(service).createNewCompany(any());
+
+        Boolean containCompany = true;
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
-                .delete("/companies/OOCL");
+                .delete("/companies/1");
 
         Assert.assertEquals(200, response.getStatusCode());
         List<Company> companyList = response.getBody().as(new TypeRef<List<Company>>() {
@@ -128,11 +126,11 @@ public class CompanyControllerTest {
             }
         });
 
-        if(companyList.stream().noneMatch(com -> com.getEmployeeList().size()!=0)){
-            containEmployee = false;
+        if(companyList.stream().noneMatch(com -> com.getId()==1)){
+            containCompany = false;
         }
 
-        Assert.assertEquals(false, containEmployee);
+        Assert.assertEquals(false, containCompany);
     }
 
     @Test
@@ -141,7 +139,7 @@ public class CompanyControllerTest {
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .body(updateCompany)
                 .when()
-                .put("/companies/ABC");
+                .put("/companies/2");
 
         Assert.assertEquals(200, response.getStatusCode());
 
@@ -156,26 +154,26 @@ public class CompanyControllerTest {
 
     @Test
     public void shouldGetWholeEmployeeListInCompany(){
-        doReturn(companies).when(service).getEmployeesInCompany(any());
+        doReturn(companies.get(0).getEmployeeList()).when(service).getEmployeesInCompany(any());
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
-                .get("/companies/OOCL/employee");
+                .get("/companies/1/employee");
 
         Assert.assertEquals(200, response.getStatusCode());
 
-        List<Company> companyList = response.getBody().as(new TypeRef<List<Company>>() {
+        List<Employee> employeeListList = response.getBody().as(new TypeRef<List<Employee>>() {
             @Override
             public Type getType() {
                 return super.getType();
             }
         });
-        Assert.assertEquals(7, companyList.get(0).getEmployeeList().size());
+        Assert.assertEquals(7, employeeListList.size());
 
     }
 
     @Test
     public void shouldReturnEmployeeListWithSpecificSize(){
-        doReturn(companies).when(service).returnCompanyListWithSpecificSize(any(),any());
+        doReturn(companies.subList(0,2)).when(service).returnCompanyListWithSpecificSize(any(),any());
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
                 .get("/companies?page=1&pageSize=5");

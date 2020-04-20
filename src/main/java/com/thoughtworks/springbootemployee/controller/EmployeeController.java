@@ -38,7 +38,7 @@ public class EmployeeController {
     @GetMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Employee getEmployeesWithSpecificID(@PathVariable int id) {
-        return service.findEmployeebyId(id);
+        return service.findEmployeeById(id);
     }
 
     @GetMapping(params = {"page", "pageSize"})
@@ -55,15 +55,15 @@ public class EmployeeController {
 
     @PutMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable Integer employeeId, @RequestBody Employee employee) {
-        service.updateEmployee(employeeId, employee);
+    public Employee updateEmployeeById(@PathVariable Integer employeeId, @RequestBody Employee employee) {
+        return service.updateEmployee(employeeId, employee);
     }
 
 
     @DeleteMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable Integer employeeId) {
-        service.deleteEmployee(employeeId);
+    public List<Employee> deleteEmployeeById(@PathVariable Integer employeeId) {
+        return service.deleteEmployee(employeeId);
     }
 
 

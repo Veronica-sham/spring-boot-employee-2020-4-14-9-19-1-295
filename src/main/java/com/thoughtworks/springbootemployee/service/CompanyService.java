@@ -36,12 +36,13 @@ public class CompanyService {
         return companyRepository.findAll();
     }
 
+    //extract to company class
     public Company updateCompany(Integer companyId, Company company) {
         Company oldCompany = companyRepository.findById(companyId).orElse(null);
         if (oldCompany != null) {
             oldCompany.setEmployeeList(company.getEmployeeList());
             oldCompany.setCompanyName(company.getCompanyName());
-            oldCompany.setEmployeesNumber(company.getEmployeesNumber());
+            oldCompany.setEmployeesNumber(company.getEmployeeList().size());
         }
         return companyRepository.findById(companyId).orElse(null);
     }
@@ -56,10 +57,6 @@ public class CompanyService {
     }
 
     public Company getCompanyWithSpecificId(Integer companyId) {
-        Company companyWithSpecificId = companyRepository.findById(companyId).orElse(null);
-        if (companyWithSpecificId == null) {
-            return null;
-        }
-        return companyWithSpecificId;
+        return companyRepository.findById(companyId).orElse(null);
     }
 }
